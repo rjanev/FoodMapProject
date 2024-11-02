@@ -1,0 +1,95 @@
+<div xmlns:th="http://www.thymeleaf.org">
+    <section class="jumbotron text-center">
+        <div class="container">
+            <h1 class="jumbotron-heading">WEB PROGRAMMING PROJECT</h1>
+        </div>
+    </section>
+
+    <div class="container ">
+        <div class="row">
+            <div class="col-md-5" style="margin: auto;width: 70%;">
+                <form action="/locals/add" method="POST" >
+                    <input id="id" type="hidden" name="id"
+                           th:value="(${local} != null ? ${local.getId()} : '')">
+                    <div class="form-group">
+                        <label for="name">Local name</label>
+                        <input type="text"
+                               class="form-control"
+                               id="name"
+                               name="name"
+                               th:value="(${local} != null ? ${local.getName()} : '')"
+                               required
+                               placeholder="Enter local name">
+                    </div>
+                    <div class="form-group">
+                        <label for="address">Address</label>
+                        <input type="text"
+                               class="form-control"
+                               id="address"
+                               name="address"
+                               th:value="(${local} != null ? ${local.getAddress()} : '')"
+                               placeholder="Address">
+                    </div>
+                    <div class="form-group">
+                        <label for="workingHours">WorkingHours</label>
+                        <input type="text"
+                               class="form-control"
+                               id="workingHours"
+                               name="workingHours"
+                               th:value="(${local} != null ? ${local.getWorkingHours()} : '')"
+                               placeholder="WorkingHours">
+                    </div>
+                    <div class="form-group">
+                        <label for="distance">Distance</label>
+                        <input type="number"
+                               class="form-control"
+                               id="distance"
+                               name="distance"
+                               th:value="(${local} != null ? ${local.getDistance()} : '')"
+                               placeholder="Distance">
+                    </div>
+                    <div class="form-group">
+                        <label for="image">Image</label>
+                        <input type="text"
+                               class="form-control"
+                               id="image"
+                               name="image"
+                               th:value="(${local} != null ? ${local.getImage()} : '')"
+                               placeholder="Image">
+                    </div>
+                    <div class="form-group">
+                        <label for="link">Link</label>
+                        <input type="text"
+                               class="form-control"
+                               id="link"
+                               name="link"
+                               th:value="(${local} != null ? ${local.getLink()} : '')"
+                               placeholder="Link">
+                    </div>
+                    <div class="form-group">
+                        <label>Type</label>
+                        <select name="type" class="form-control">
+                            <option
+                                    th:if="${local} != null"
+                                    th:each="t : ${types}"
+                                    th:selected="${t == local.getType()}"
+                                    th:value="${t}"
+                                    th:text="${t}">
+                            >
+                            </option>
+                            <option
+                                    th:if="${local} == null"
+                                    th:each="t : ${types}"
+                                    th:value="${t}"
+                                    th:text="${t}">
+                            </option>
+
+                        </select>
+                    </div>
+                    <button id="submit" type="submit" class="btn btn-primary">Submit</button>
+                    <a type="button" class="btn btn-secondary" href="/locals">Back</a>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

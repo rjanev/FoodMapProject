@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        #main-img{
+            width: 40%;
+        }
+        @media (max-width: 992px){
+            #main-img{
+                width: 70%;
+            }
+        }
+        .comments-section {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            max-width: 600px;
+            width: 100%;
+        }
+
+        .comments-section h2 {
+            margin-top: 0;
+        }
+
+        .comment {
+            background-color: #f9f9f9;
+            border-radius: 5px;
+            padding: 10px;
+            margin-bottom: 10px;
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+            position: relative;
+        }
+
+        .comment-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .comment .comment-name {
+            font-weight: bold;
+        }
+
+        .comment .comment-date {
+            font-size: 0.9em;
+            color: #888;
+        }
+
+        .comment .comment-text {
+            margin-bottom: 10px;
+            word-wrap: break-word; /* Break long words */
+            white-space: pre-wrap; /* Maintain spaces and line breaks */
+        }
+
+        .comment .delete-button {
+            background-color: #e74c3c;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            padding: 5px 10px;
+            cursor: pointer;
+            position: absolute;
+            top: 10px;
+            right: 10px;
+        }
+
+        .comment .delete-button:hover {
+            background-color: #c0392b;
+        }
+    </style>
+
+</head>
+<body>
+
+<div class="container">
+<div class="card mb-3" style="max-width: 100%;">
+    <div class="row g-0">
+        <div class="col-md-6">
+            <img th:src="@{${local.getImage()}}"  style="height: 25rem" class="card-img" alt="...">
+        </div>
+        <div class="col-md-6 d-flex justify-content-end align-items-center">
+            <div class="card-body text-center" >
+                <h3 class="card-title" th:text="${local.getName()}">Local name</h3>
+                <p class="card-text"><strong>Working hours:</strong> <span th:text="${local.getWorkingHours()}"></span></p>
+                <p class="card-text"><strong>Address:</strong> <span th:text="${local.getAddress()}"></span></p>
+                <p class="card-text"><strong>Type:</strong> <span th:text="${local.getType()}"></span></p>
+                <p class="card-text"><strong>Distance: </strong> <span th:text="${local.getDistance()}"></span>m.</p>
+                <p class="card-text"><strong>Likes: </strong> <span th:text="${local.getLikee()}"></span></p>
+                <a style="background-color: #205c7c" class="text-white card-text btn text-decoration-none" th:href="${local.getLink()}">Find on map</a>
+
+
+
+
+            </div>
+        </div>
+    </div>
+</div>
+    <ul class="list-group">
+        <li class="list-group-item d-flex justify-content-between align-items-center fs-3 text-white" style="background-color: #205c7c">
+            Храна
+        </li>
+        <li th:each="pr : ${foodProducts}" class="list-group-item d-flex justify-content-between align-items-center p-4" >
+            <span class="fs-5" th:text="${pr.name}"></span>
+            <span class="badge text-white rounded-pill fs-6" style="background-color: #205c7c" th:text="'МКД ' + ${pr.price}"></span>
+        </li>
+    </ul>
+
+    <ul class="list-group">
+        <li class="list-group-item d-flex justify-content-between align-items-center fs-3 text-white" style="background-color: #205c7c">
+            Пијалоци
+        </li>
+        <li th:each="pr : ${drinkProducts}" class="list-group-item d-flex justify-content-between align-items-center p-4" >
+            <span class="fs-5" th:text="${pr.name}"></span>
+            <span class="badge text-white rounded-pill fs-6" style="background-color: #205c7c" th:text="'МКД ' + ${pr.price}"></span>
+        </li>
+    </ul>
+</div>
+
+
+<div class="container">
+<h3 style="margin-top: 30px">Comments</h3>
+
+    <div class="comments-section">
+
+        <div class="comment" th:each="c : ${comments}">
+        <div class="comment-header">
+            <div class="comment-date" th:text="${c.getDate()}"></div>
+        </div>
+        <div class="comment-text" th:text="${c.getComment()}"></div>
+
+    </div>
+    </div>
+
+</div>
+<div class="container">
+<form action="/locals/addComment" method="POST" style="margin-top: 30px">
+    <input id="localId" type="hidden" name="localId"
+           th:value="(${local.getId()})">
+    <div class="form-group">
+        <label for="commentText">Add a comment</label>
+        <input type="text" class="form-control"  id="commentText" name="commentText">
+    </div>
+    <input type="submit" class="btn text-white" style="background-color: #205c7c" value="Submit">
+</form>
+</div>
+</body>
+</html>
+
+
+
+
+
+
+
+
